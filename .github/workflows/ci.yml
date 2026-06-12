@@ -47,4 +47,4 @@ jobs:
           node-version: 20
           cache: npm
       - run: npm ci
-      - run: cd packages/mobile && npx expo export
+      - run: cd packages/mobile && npx expo export --platform web

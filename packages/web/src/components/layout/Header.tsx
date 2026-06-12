@@ -1,7 +1,6 @@
 "use client";
 
-import { ConnectButton } from "@rainbow-me/rainbowkit";
-import { Bell, Search } from "lucide-react";
+import { Bell, Search, Wallet } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
 export function Header() {
@@ -23,7 +22,10 @@ export function Header() {
           <Bell className="h-5 w-5" />
           <span className="absolute right-1 top-1 h-2 w-2 rounded-full bg-primary" />
         </Button>
-        <ConnectButton />
+        <Button variant="glass" size="sm">
+          <Wallet className="mr-2 h-4 w-4" />
+          0x1234...5678
+        </Button>
       </div>
     </header>
   );

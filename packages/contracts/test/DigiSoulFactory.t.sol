@@ -25,10 +25,10 @@ contract DigiSoulFactoryTest is Test {
 
         DigiSoulFactory.UserVault memory uv = factory.getUserVault(user);
         assertEq(uv.vaultAddress, vault, "Vault address should match");
-        assertGt(uv.assetVault, address(0), "Asset vault should be set");
-        assertGt(uv.nomineeManager, address(0), "Nominee manager should be set");
-        assertGt(uv.willRegistry, address(0), "Will registry should be set");
-        assertGt(uv.inheritanceController, address(0), "Inheritance controller should be set");
+        assertTrue(uv.assetVault != address(0), "Asset vault should be set");
+        assertTrue(uv.nomineeManager != address(0), "Nominee manager should be set");
+        assertTrue(uv.willRegistry != address(0), "Will registry should be set");
+        assertTrue(uv.inheritanceController != address(0), "Inheritance controller should be set");
     }
 
     function test_RevertIfVaultAlreadyExists() public {

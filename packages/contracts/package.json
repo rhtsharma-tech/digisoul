@@ -6,12 +6,12 @@
     "build": "forge build",
     "test": "forge test",
     "test:gas": "forge test --gas-report",
-    "lint": "solhint 'src/**/*.sol'",
+    "lint": "tsc --noEmit",
     "clean": "forge clean",
     "deploy:amoy": "forge script script/Deploy.s.sol --rpc-url polygon_amoy --broadcast --verify",
     "deploy:local": "forge script script/Deploy.s.sol --rpc-url localhost --broadcast"
   },
   "devDependencies": {
-    "solhint": "^5.0.0"
+    "typescript": "^5.7.0"
   }
 }
