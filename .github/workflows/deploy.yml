@@ -22,17 +22,8 @@ jobs:
         run: npm install --legacy-peer-deps
       - name: Install Vercel CLI
         run: npm install -g vercel@latest
-      - name: Update Vercel Project Root Directory
-        run: |
-          curl -s -X PATCH "https://api.vercel.com/v9/projects/prj_9Aw35eJUJ8zgbRCSn3kEG2188Fpj" \
-            -H "Authorization: Bearer $VERCEL_TOKEN" \
-            -H "Content-Type: application/json" \
-            -d '{"rootDirectory":"packages/web"}'
-        env:
-          VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
       - name: Deploy to Production
         run: vercel --prod --yes --token=$VERCEL_TOKEN
-        working-directory: packages/web
         env:
           VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
           VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
