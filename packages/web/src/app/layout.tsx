@@ -10,7 +10,7 @@ const inter = Inter({
 export const metadata: Metadata = {
   title: "DigiSoul — Secure Your Digital Legacy",
   description:
-    "A blockchain-based digital inheritance platform. Store your assets, set nominees, and create smart wills to secure your digital legacy.",
+    "A blockchain-based digital inheritance platform. Store your assets, assign nominees, and create smart wills to secure your digital legacy.",
   keywords: [
     "digital inheritance",
     "crypto will",
