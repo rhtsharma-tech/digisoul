@@ -15,10 +15,19 @@
     "clean": "turbo clean",
     "test": "turbo test",
     "deploy:contracts": "cd packages/contracts && forge script script/Deploy.s.sol --broadcast --verify",
-    "deploy:web": "cd packages/web && vercel --prod"
+    "deploy:web": "cd packages/web && vercel --prod",
+    "ci": "bash scripts/ci-local.sh",
+    "prepare": "husky"
+  },
+  "lint-staged": {
+    "*.{ts,tsx}": [
+      "tsc --noEmit --pretty"
+    ]
   },
   "devDependencies": {
     "caniuse-lite": "^1.0.30001690",
+    "husky": "^9.0.0",
+    "lint-staged": "^15.2.0",
     "postcss": "^8.4.0",
     "postcss-nested": "^6.0.0",
     "postcss-selector-parser": "^6.0.0",

@@ -1,0 +1,7 @@
+{
+  "framework": "nextjs",
+  "installCommand": "npm install --legacy-peer-deps",
+  "buildCommand": "npm run build --workspace=packages/shared && npm run build --workspace=packages/web",
+  "outputDirectory": ".next",
+  "ignoreCommand": "npx turbo-ignore@latest --fallback=origin/main"
+}

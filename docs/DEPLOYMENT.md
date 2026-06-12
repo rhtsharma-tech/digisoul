@@ -85,6 +85,71 @@ eas build --platform android
 eas submit --platform android
 ```
 
+## CI/CD Pipeline
+
+### GitHub Actions Workflows
+
+#### CI Workflow (`.github/workflows/ci.yml`)
+
+Runs on every push to `main` and pull requests:
+
+1. **Lint** - Runs TypeScript checks across all packages
+2. **Test Contracts** - Runs Foundry tests for smart contracts
+3. **Typecheck Shared** - Validates shared package types
+4. **Build Web** - Builds Next.js application and verifies output
+
+#### Deploy Workflow (`.github/workflows/deploy.yml`)
+
+Triggers on pushes to `main` when these paths change:
+- `packages/web/**`
+- `packages/shared/**`
+- `turbo.json`
+- `.github/workflows/deploy.yml`
+
+**Steps:**
+1. Install dependencies with `--legacy-peer-deps`
+2. Build shared package
+3. Build web package
+4. Verify build output exists
+5. Deploy to Vercel production
+6. Report deployment status
+
+### Required GitHub Secrets
+
+Configure these in GitHub repository settings:
+
+| Secret | Description |
+|--------|-------------|
+| `VERCEL_TOKEN` | Vercel authentication token |
+| `VERCEL_ORG_ID` | Vercel organization ID |
+| `VERCEL_PROJECT_ID` | Vercel project ID for web app |
+
+### Vercel Configuration
+
+The `vercel.json` in the repo root configures:
+- Framework: Next.js
+- Install command: `npm install --legacy-peer-deps`
+- Build command: Builds shared package first, then web
+- Output directory: `.next`
+- Ignore command: Uses `turbo-ignore` for smart change detection
+
+### Troubleshooting CI/CD
+
+**Build fails with peer dependency errors:**
+- Ensure `--legacy-peer-deps` is used in install commands
+
+**Shared package types not found:**
+- Ensure `npm run build --workspace=packages/shared` runs before web build
+
+**Vercel deployment fails:**
+- Check that all three secrets are configured correctly
+- Verify the Vercel project is linked to the correct repository
+- Ensure the rootDirectory setting in Vercel matches `packages/web`
+
+**Deploy doesn't trigger:**
+- Verify the push includes changes to `packages/web/**` or `packages/shared/**`
+- Check that the workflow file hasn't been modified to break the trigger
+
 ## Post-Deployment
 
 ### Update Contract Addresses

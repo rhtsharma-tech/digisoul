@@ -6,20 +6,26 @@ on:
   pull_request:
     branches: [main]
 
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
   lint:
     runs-on: ubuntu-latest
+    timeout-minutes: 10
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
         with:
           node-version: 20
           cache: npm
-      - run: npm install
+      - run: npm install --legacy-peer-deps
       - run: npm run lint
 
   test-contracts:
     runs-on: ubuntu-latest
+    timeout-minutes: 15
     steps:
       - uses: actions/checkout@v4
         with:
@@ -27,13 +33,34 @@ jobs:
       - uses: foundry-rs/foundry-toolchain@v1
       - run: cd packages/contracts && forge test
 
-  build-web:
+  typecheck-shared:
     runs-on: ubuntu-latest
+    timeout-minutes: 10
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
         with:
           node-version: 20
           cache: npm
-      - run: npm install
-      - run: cd packages/web && npm run build
+      - run: npm install --legacy-peer-deps
+      - run: npm run lint --workspace=packages/shared
+
+  build-web:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    needs: [typecheck-shared]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+      - run: npm install --legacy-peer-deps
+      - run: npm run build --workspace=packages/shared
+      - run: npm run build --workspace=packages/web
+      - name: Verify build output
+        run: |
+          if [ ! -d "packages/web/.next" ]; then
+            echo "::error::Web build output (.next directory) not found"
+            exit 1
+          fi

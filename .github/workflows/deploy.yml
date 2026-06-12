@@ -5,26 +5,60 @@ on:
     branches: [main]
     paths:
       - 'packages/web/**'
+      - 'packages/shared/**'
+      - 'turbo.json'
       - '.github/workflows/deploy.yml'
+
+concurrency:
+  group: deploy-production
+  cancel-in-progress: false
 
 jobs:
   deploy:
     runs-on: ubuntu-latest
+    timeout-minutes: 20
     steps:
       - uses: actions/checkout@v4
-        with:
-          submodules: recursive
       - uses: actions/setup-node@v4
         with:
           node-version: 20
           cache: npm
+
       - name: Install Dependencies
         run: npm install --legacy-peer-deps
+
+      - name: Build shared package
+        run: npm run build --workspace=packages/shared
+
+      - name: Build web package
+        run: npm run build --workspace=packages/web
+
+      - name: Verify build output
+        run: |
+          if [ ! -d "packages/web/.next" ]; then
+            echo "::error::Web build output (.next directory) not found"
+            exit 1
+          fi
+
       - name: Install Vercel CLI
         run: npm install -g vercel@latest
+
       - name: Deploy to Production
         run: vercel --prod --yes --token=$VERCEL_TOKEN
         env:
           VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
           VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
           VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
+
+      - name: Deployment Summary
+        if: always()
+        run: |
+          echo "## Deployment Status" >> $GITHUB_STEP_SUMMARY
+          if [ "${{ job.status }}" = "success" ]; then
+            echo "✅ Web deployment completed successfully" >> $GITHUB_STEP_SUMMARY
+          else
+            echo "❌ Web deployment failed" >> $GITHUB_STEP_SUMMARY
+          fi
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "**Triggered by:** ${{ github.event.head_commit.message }}" >> $GITHUB_STEP_SUMMARY
+          echo "**Commit:** ${{ github.sha }}" >> $GITHUB_STEP_SUMMARY
