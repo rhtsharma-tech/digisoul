@@ -246,6 +246,7 @@ export default function AddNomineePage() {
                 />
               </div>
             </div>
+            )}
 
             <Button
               variant="gold"

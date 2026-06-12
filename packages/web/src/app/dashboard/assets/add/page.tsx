@@ -109,10 +109,10 @@ export default function AddAssetPage() {
     if (step === 0) return assetType !== null;
     if (step === 1) {
       if (assetType === "ERC20")
-        return erc20Data.name && erc20Data.contractAddress && erc20Data.amount;
+        return !!(erc20Data.name && erc20Data.contractAddress && erc20Data.amount);
       if (assetType === "ERC721")
-        return erc721Data.name && erc721Data.contractAddress && erc721Data.tokenId;
-      if (assetType === "Document") return docData.name && (docData.file || docData.ipfsHash);
+        return !!(erc721Data.name && erc721Data.contractAddress && erc721Data.tokenId);
+      if (assetType === "Document") return !!(docData.name && (docData.file || docData.ipfsHash));
     }
     return true;
   };

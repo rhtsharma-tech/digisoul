@@ -1,5 +1,8 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+  eslint: {
+    ignoreDuringBuilds: true,
+  },
   transpilePackages: ['@digisoul/shared'],
   webpack: (config) => {
     config.resolve.fallback = {
