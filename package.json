@@ -1,0 +1,28 @@
+{
+  "name": "digisoul",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Secure Your Digital Legacy — Blockchain-based digital inheritance platform",
+  "workspaces": [
+    "packages/shared",
+    "packages/contracts",
+    "packages/web"
+  ],
+  "scripts": {
+    "dev": "turbo dev",
+    "build": "turbo build",
+    "lint": "turbo lint",
+    "clean": "turbo clean",
+    "test": "turbo test",
+    "deploy:contracts": "cd packages/contracts && forge script script/Deploy.s.sol --broadcast --verify",
+    "deploy:web": "cd packages/web && vercel --prod"
+  },
+  "devDependencies": {
+    "turbo": "^2.4.0",
+    "typescript": "^5.7.0"
+  },
+  "engines": {
+    "node": ">=20"
+  },
+  "packageManager": "npm@10.9.0"
+}
