@@ -21,7 +21,7 @@ export interface AssetFormData {
   name: string;
   symbol?: string;
   metadataURI?: string;
-  file?: File;
+  file?: unknown;
 }
 
 export interface AssetWithUSD extends Asset {
