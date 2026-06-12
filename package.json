@@ -19,6 +19,8 @@
   },
   "devDependencies": {
     "postcss": "^8.4.0",
+    "postcss-nested": "^6.0.0",
+    "postcss-selector-parser": "^6.0.0",
     "turbo": "^2.4.0",
     "typescript": "^5.7.0"
   },
